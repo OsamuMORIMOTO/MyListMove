@@ -15,20 +15,15 @@ namespace MyListMove
         /// <summary>
         /// コメント番号
         /// </summary>
-        public int CommentNo
+        public string CommentNo
         {
             get
             {
-                int tempCommentNo;
-                if (int.TryParse(this.labelCommentNo.Text, out tempCommentNo))
-                {
-                    return tempCommentNo;
-                }
-                return -1;
+                return this.labelCommentNo.Text;
             }
             set
             {
-                this.labelCommentNo.Text = value.ToString();
+                this.labelCommentNo.Text = value;
             }
         }
 

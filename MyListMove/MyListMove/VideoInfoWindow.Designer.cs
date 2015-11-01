@@ -1,6 +1,6 @@
 ﻿namespace MyListMove
 {
-    partial class Form1
+    partial class VideoInfoWindow
     {
         /// <summary>
         /// Required designer variable.

@@ -12,17 +12,36 @@ using System.Xml;
 
 namespace MyListMove
 {
-    public partial class Form1 : Form
+    public partial class VideoInfoWindow : Form
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private List<VideoInfoPanel> videoInfoList = new List<VideoInfoPanel>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commentID"></param>
+        /// <param name="UserID"></param>
+        /// <param name="videoURL"></param>
+        /// <returns></returns>
         delegate bool AddVideoInfoCallback(string commentID, string UserID, string videoURL);
 
-        public Form1()
+        /// <summary>
+        /// 
+        /// </summary>
+        public VideoInfoWindow()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// テストボタン
+        /// TODO:実装完了後、削除すること
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -36,7 +55,7 @@ namespace MyListMove
         /// <param name="commentID"></param>
         /// <param name="UserID"></param>
         /// <param name="videoURL"></param>
-        public void AddVideoInfoCommand(string commentID, string UserID, string videoURL)
+        public void AddVideoInfoCommand(string commentId, string UserId, string videoURL)
         {
 
             if (this.InvokeRequired)
@@ -45,7 +64,7 @@ namespace MyListMove
                 {
                     AddVideoInfoCallback delegateMethod = new AddVideoInfoCallback(AddVideoInfo);
 
-                    this.Invoke(delegateMethod,commentID,UserID,videoURL);
+                    this.Invoke(delegateMethod,commentId,UserId,videoURL);
                 }
                 catch (Exception ex)
                 {
@@ -56,7 +75,7 @@ namespace MyListMove
             }
             else
             {
-                AddVideoInfo(commentID, UserID, videoURL);
+                AddVideoInfo(commentId, UserId, videoURL);
             }
 
         }
@@ -64,15 +83,22 @@ namespace MyListMove
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="commentID"></param>
-        /// <param name="UserID"></param>
+        /// <param name="commentId"></param>
+        /// <param name="userId"></param>
         /// <param name="videoURL"></param>
         /// <returns></returns>
-        public bool AddVideoInfo (string commentID, string UserID, string videoURL)
+        public bool AddVideoInfo (string commentId, string userId, string videoURL)
         {
-            
+
+            string videoId;
+
+            if (!anariseCommentURL(videoURL, out videoId))
+            {
+                return false;
+            }
+
             // 動画情報取得
-            string URLString = "http://www.nicovideo.jp/api/getthumbinfo/" + textBoxURL.Text;
+            string URLString = "http://www.nicovideo.jp/api/getthumbinfo/" + videoId;
 
             try
             {
@@ -96,8 +122,8 @@ namespace MyListMove
                 // 動画情報パネル追加
                 VideoInfoPanel tempVideoInfoPanel = new VideoInfoPanel();
                 
-                tempVideoInfoPanel.CommentNo = 123456789;
-                tempVideoInfoPanel.UserID = "テストユーザID:" + tempVideoInfoPanel.Controls.Count.ToString();
+                tempVideoInfoPanel.CommentNo = commentId;
+                tempVideoInfoPanel.UserID = userId;
                 tempVideoInfoPanel.VideoTitle = tempTitle;
                 tempVideoInfoPanel.VideoTime = tempTime;
                 tempVideoInfoPanel.VideoURL = tempURL;
@@ -125,5 +151,25 @@ namespace MyListMove
 
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="receivedComment"></param>
+        /// <returns></returns>
+        private bool anariseCommentURL(string receivedComment, out string videoId)
+        {
+
+            videoId = "";
+
+            if (!receivedComment.Contains("http://www.nicovideo.jp/watch/"))
+            {
+                return false;
+            }
+            
+            videoId = receivedComment.Replace("http://www.nicovideo.jp/watch/", "").Split('?')[0]; ;
+
+            return true;
+        }
+
     }
 }

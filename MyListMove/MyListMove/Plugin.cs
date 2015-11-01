@@ -11,9 +11,6 @@ namespace MyListMove
 {
     public class Plugin : IPlugin
     {
-        private IPluginHost _host = null;
-        private Form1 _form = null;
-
         /// <summary>
         /// プラグイン説明
         /// </summary>
@@ -33,11 +30,11 @@ namespace MyListMove
         {
             get
             {
-                return this._host;
+                return this.pluginHost;
             }           
             set
             {
-                this._host = value;
+                this.pluginHost = value;
             }
         }
 
@@ -83,41 +80,86 @@ namespace MyListMove
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        private IPluginHost pluginHost = null;
+
+        /// <summary>
+        /// 動画情報ウィンドウ
+        /// </summary>
+        private VideoInfoWindow viWindow = null;
+
+        /// <summary>
         /// メイン処理
         /// </summary>
         public void Run()
         {
-            // System.Windows.Forms.MessageBox.Show("Hello NCV Plugins!");
-
-            if(_form == null)
+            // 動画情報ウィンド生成・表示
+            if(viWindow == null)
             {
-                _form = new Form1();
-                _form.Show((System.Windows.Forms.IWin32Window)_host.MainForm);
+                viWindow = new VideoInfoWindow();
             }
 
-            _host.ReceivedComment += new ReceivedCommentEventHandler(_host_ReceivedComment);
+            viWindow.Show((System.Windows.Forms.IWin32Window)pluginHost.MainForm);
+
+            // イベントハンドラ登録
+            pluginHost.ReceivedComment += new ReceivedCommentEventHandler(PluginHost_ReceivedComment);
 
         }
 
         /// <summary>
-        /// 
+        /// コメント受信イベント処理
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void _host_ReceivedComment(object sender, ReceivedCommentEventArgs e)
+        private void PluginHost_ReceivedComment(object sender, ReceivedCommentEventArgs e)
         {
             int count = e.CommentDataList.Count;
             if (count < 0) { return; }
 
             NicoLibrary.NicoLiveData.LiveCommentData commentData = e.CommentDataList[count - 1];
 
-            string no = commentData.No;
+            string commentNo = commentData.No;
             string anonymity = commentData.Anonymity;
             string comment = commentData.Comment;
-            string userid = commentData.UserId;
+            string userId = commentData.UserId;
+            string kotehan = "184";
 
-            _form.AddVideoInfoCommand(no, userid, comment);
+            UserSettingInPlugin userSetting = pluginHost.GetUserSettingInPlugin();
+
+            foreach (UserSettingInPlugin.UserData userData in userSetting.UserDataList)
+            {
+                if (userData.UserId.Equals(userId))
+                {
+                    kotehan = userData.NickName;
+
+                    
+                }
+            }
+
+            viWindow.AddVideoInfoCommand(commentNo, kotehan, comment);
             
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ShowReqInfo2BSP()
+        {
+            pluginHost.SendOwnerComment("/press show blue {0} 業務連絡");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="videoTitle"></param>
+        /// <param name="videoURL"></param>
+        /// <param name=""></param>
+        public void ShowVideoInfo2Own(string videoTitle, string videoURL, string kotehan)
+        {
+            string announceComment = "/perm 只今の動画　Title:[{0}] ,URL:[{1}] 投稿者:[{2}]";
+            pluginHost.SendOwnerComment(announceComment);
+        }
+
     }
 }
