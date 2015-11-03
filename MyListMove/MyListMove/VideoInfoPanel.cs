@@ -101,6 +101,23 @@ namespace MyListMove
                 this.picturerThumbnail.ImageLocation = value;
             }
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public event VideoInfoEventHandler EventManageButtonClick;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnEventManageButtonClick(VideoInfoEventArg e)
+        {
+            if(EventManageButtonClick != null)
+            {
+                EventManageButtonClick(this, e);
+            }
+        }
 
         /// <summary>
         /// コンストラクタ
@@ -122,6 +139,25 @@ namespace MyListMove
 
             // 既定のアプリケーションで URL を開く
             System.Diagnostics.Process.Start(this.linkLabelVideoURL.Text);
+        }
+
+        /// <summary>
+        /// 運営ボタンクリックイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ManagerButton_Click(object sender, EventArgs e)
+        {
+            VideoInfoEventArg info = new VideoInfoEventArg();
+
+            info.CommentNo = this.CommentNo;
+            info.UserID = this.UserID;
+            info.VideoTitle = this.VideoTitle;
+            info.VideoTime = this.VideoTime;
+            info.VideoURL = this.VideoURL;
+            info.ThumbnailURL = this.ThumbnailURL;
+
+            OnEventManageButtonClick(info);
         }
     }
 }

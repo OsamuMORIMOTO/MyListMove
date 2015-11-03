@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Plugin;
 using NicoLibrary;
 
+using NLog;
+
 namespace MyListMove
 {
     public class Plugin : IPlugin
@@ -18,7 +20,6 @@ namespace MyListMove
         {
             get
             {
-                // TODO
                 return "Description";
             }
         }
@@ -76,7 +77,8 @@ namespace MyListMove
         /// </summary>
         public void AutoRun()
         {
-            // TODO
+            // 自動実行処理
+            // 本バージョンでの機能なし
         }
 
         /// <summary>
@@ -94,16 +96,21 @@ namespace MyListMove
         /// </summary>
         public void Run()
         {
+            Logger logger = LogManager.GetCurrentClassLogger();
+            logger.Info("プラグイン初期化開始");
+
             // 動画情報ウィンド生成・表示
             if(viWindow == null)
             {
-                viWindow = new VideoInfoWindow();
+                viWindow = new VideoInfoWindow(pluginHost);
             }
 
             viWindow.Show((System.Windows.Forms.IWin32Window)pluginHost.MainForm);
 
             // イベントハンドラ登録
             pluginHost.ReceivedComment += new ReceivedCommentEventHandler(PluginHost_ReceivedComment);
+
+            logger.Info("プラグイン初期化終了");
 
         }
 
@@ -131,34 +138,12 @@ namespace MyListMove
             {
                 if (userData.UserId.Equals(userId))
                 {
-                    kotehan = userData.NickName;
-
-                    
+                    kotehan = userData.NickName;                    
                 }
             }
 
             viWindow.AddVideoInfoCommand(commentNo, kotehan, comment);
             
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ShowReqInfo2BSP()
-        {
-            pluginHost.SendOwnerComment("/press show blue {0} 業務連絡");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="videoTitle"></param>
-        /// <param name="videoURL"></param>
-        /// <param name=""></param>
-        public void ShowVideoInfo2Own(string videoTitle, string videoURL, string kotehan)
-        {
-            string announceComment = "/perm 只今の動画　Title:[{0}] ,URL:[{1}] 投稿者:[{2}]";
-            pluginHost.SendOwnerComment(announceComment);
         }
 
     }

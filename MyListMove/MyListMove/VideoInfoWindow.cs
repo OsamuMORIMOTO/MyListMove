@@ -10,10 +10,20 @@ using System.Windows.Forms;
 
 using System.Xml;
 
+using Plugin;
+using NicoLibrary;
+
+using NLog;
+
 namespace MyListMove
 {
     public partial class VideoInfoWindow : Form
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        private IPluginHost pluginHost;
+
         /// <summary>
         /// 
         /// </summary>
@@ -31,9 +41,11 @@ namespace MyListMove
         /// <summary>
         /// 
         /// </summary>
-        public VideoInfoWindow()
+        public VideoInfoWindow(IPluginHost plgin)
         {
             InitializeComponent();
+
+            pluginHost = plgin;
         }
 
         /// <summary>
@@ -58,13 +70,16 @@ namespace MyListMove
         public void AddVideoInfoCommand(string commentId, string UserId, string videoURL)
         {
 
+            Logger logger = LogManager.GetCurrentClassLogger();
+
             if (this.InvokeRequired)
             {
                 try
                 {
                     AddVideoInfoCallback delegateMethod = new AddVideoInfoCallback(AddVideoInfo);
 
-                    this.Invoke(delegateMethod,commentId,UserId,videoURL);
+                    bool value = (bool)this.Invoke(delegateMethod,commentId,UserId,videoURL);
+                    logger.Info("Invoke return:" + value.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -132,11 +147,13 @@ namespace MyListMove
                 Point tempPoint = new Point(3, 10 + (200 * videoInfoList.Count));
                 tempPoint.Offset(panelVideoInfoList.AutoScrollPosition);
                 tempVideoInfoPanel.Location = tempPoint;
-                
+
+                tempVideoInfoPanel.EventManageButtonClick += new VideoInfoEventHandler(ManageButtonsClick);
+
                 videoInfoList.Add(tempVideoInfoPanel);
 
                 panelVideoInfoList.Controls.Add(videoInfoList.Last());
-
+                
             }
             catch (Exception ex)
             {
@@ -151,6 +168,19 @@ namespace MyListMove
 
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ManageButtonsClick(object sender, VideoInfoEventArg e)
+        {
+            Logger logger = LogManager.GetCurrentClassLogger();
+            logger.Info("UserID:" + e.UserID);
+
+            this.ShowVideoInfo2Own(e.VideoTitle,e.VideoURL,e.UserID);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -169,6 +199,27 @@ namespace MyListMove
             videoId = receivedComment.Replace("http://www.nicovideo.jp/watch/", "").Split('?')[0]; ;
 
             return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void ShowReqInfo2BSP()
+        {
+            pluginHost.SendOwnerComment("/press show blue {0} 業務連絡");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="videoTitle"></param>
+        /// <param name="videoURL"></param>
+        /// <param name=""></param>
+        private void ShowVideoInfo2Own(string videoTitle, string videoURL, string kotehan)
+        {
+            string announceComment = "/perm 只今の動画　Title:[{0}] ,URL:[{1}] リクエストした人:[{2}]";
+            string output = String.Format(announceComment, videoTitle, videoURL, kotehan);
+            pluginHost.SendOwnerComment(output);
         }
 
     }

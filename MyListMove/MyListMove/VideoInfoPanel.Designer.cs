@@ -35,7 +35,7 @@
             this.labelVideoTime = new System.Windows.Forms.Label();
             this.linkLabelVideoURL = new System.Windows.Forms.LinkLabel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.ManagerButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picturerThumbnail)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -98,7 +98,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.ManagerButton);
             this.panel1.Controls.Add(this.labelCommentNo);
             this.panel1.Controls.Add(this.picturerThumbnail);
             this.panel1.Controls.Add(this.linkLabelVideoURL);
@@ -110,14 +110,15 @@
             this.panel1.Size = new System.Drawing.Size(494, 194);
             this.panel1.TabIndex = 3;
             // 
-            // button1
+            // ManagerButton
             // 
-            this.button1.Location = new System.Drawing.Point(203, 154);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(81, 20);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "運営コメント";
-            this.button1.UseVisualStyleBackColor = true;
+            this.ManagerButton.Location = new System.Drawing.Point(203, 154);
+            this.ManagerButton.Name = "ManagerButton";
+            this.ManagerButton.Size = new System.Drawing.Size(81, 20);
+            this.ManagerButton.TabIndex = 3;
+            this.ManagerButton.Text = "運営コメント";
+            this.ManagerButton.UseVisualStyleBackColor = true;
+            this.ManagerButton.Click += new System.EventHandler(this.ManagerButton_Click);
             // 
             // VideoInfoPanel
             // 
@@ -142,6 +143,6 @@
         private System.Windows.Forms.Label labelVideoTime;
         private System.Windows.Forms.LinkLabel linkLabelVideoURL;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button ManagerButton;
     }
 }
