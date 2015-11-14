@@ -42,25 +42,26 @@
             // 
             // picturerThumbnail
             // 
-            this.picturerThumbnail.Location = new System.Drawing.Point(3, 3);
+            this.picturerThumbnail.Location = new System.Drawing.Point(5, 5);
+            this.picturerThumbnail.Margin = new System.Windows.Forms.Padding(5);
             this.picturerThumbnail.Name = "picturerThumbnail";
-            this.picturerThumbnail.Size = new System.Drawing.Size(194, 188);
+            this.picturerThumbnail.Size = new System.Drawing.Size(130, 100);
             this.picturerThumbnail.TabIndex = 0;
             this.picturerThumbnail.TabStop = false;
             // 
             // labelCommentNo
             // 
             this.labelCommentNo.AutoSize = true;
-            this.labelCommentNo.Location = new System.Drawing.Point(203, 29);
+            this.labelCommentNo.Location = new System.Drawing.Point(143, 5);
             this.labelCommentNo.Name = "labelCommentNo";
-            this.labelCommentNo.Size = new System.Drawing.Size(35, 12);
+            this.labelCommentNo.Size = new System.Drawing.Size(67, 12);
             this.labelCommentNo.TabIndex = 1;
-            this.labelCommentNo.Text = "*****";
+            this.labelCommentNo.Text = "CommentNo";
             // 
             // labelUserID
             // 
             this.labelUserID.AutoSize = true;
-            this.labelUserID.Location = new System.Drawing.Point(244, 29);
+            this.labelUserID.Location = new System.Drawing.Point(216, 5);
             this.labelUserID.Name = "labelUserID";
             this.labelUserID.Size = new System.Drawing.Size(40, 12);
             this.labelUserID.TabIndex = 1;
@@ -69,7 +70,7 @@
             // labelVideoTitle
             // 
             this.labelVideoTitle.AutoSize = true;
-            this.labelVideoTitle.Location = new System.Drawing.Point(203, 61);
+            this.labelVideoTitle.Location = new System.Drawing.Point(143, 34);
             this.labelVideoTitle.Name = "labelVideoTitle";
             this.labelVideoTitle.Size = new System.Drawing.Size(57, 12);
             this.labelVideoTitle.TabIndex = 1;
@@ -78,16 +79,16 @@
             // labelVideoTime
             // 
             this.labelVideoTime.AutoSize = true;
-            this.labelVideoTime.Location = new System.Drawing.Point(203, 99);
+            this.labelVideoTime.Location = new System.Drawing.Point(143, 64);
             this.labelVideoTime.Name = "labelVideoTime";
-            this.labelVideoTime.Size = new System.Drawing.Size(37, 12);
+            this.labelVideoTime.Size = new System.Drawing.Size(59, 12);
             this.labelVideoTime.TabIndex = 1;
-            this.labelVideoTime.Text = "***:**";
+            this.labelVideoTime.Text = "VideoTime";
             // 
             // linkLabelVideoURL
             // 
             this.linkLabelVideoURL.AutoSize = true;
-            this.linkLabelVideoURL.Location = new System.Drawing.Point(203, 125);
+            this.linkLabelVideoURL.Location = new System.Drawing.Point(143, 93);
             this.linkLabelVideoURL.Name = "linkLabelVideoURL";
             this.linkLabelVideoURL.Size = new System.Drawing.Size(56, 12);
             this.linkLabelVideoURL.TabIndex = 2;
@@ -107,12 +108,12 @@
             this.panel1.Controls.Add(this.labelVideoTitle);
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(494, 194);
+            this.panel1.Size = new System.Drawing.Size(394, 114);
             this.panel1.TabIndex = 3;
             // 
             // ManagerButton
             // 
-            this.ManagerButton.Location = new System.Drawing.Point(203, 154);
+            this.ManagerButton.Location = new System.Drawing.Point(218, 60);
             this.ManagerButton.Name = "ManagerButton";
             this.ManagerButton.Size = new System.Drawing.Size(81, 20);
             this.ManagerButton.TabIndex = 3;
@@ -126,7 +127,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Name = "VideoInfoPanel";
-            this.Size = new System.Drawing.Size(500, 200);
+            this.Size = new System.Drawing.Size(400, 120);
             ((System.ComponentModel.ISupportInitialize)(this.picturerThumbnail)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

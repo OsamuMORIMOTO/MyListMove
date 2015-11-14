@@ -29,6 +29,8 @@ namespace MyListMove
         /// </summary>
         private List<VideoInfoPanel> videoInfoList = new List<VideoInfoPanel>();
 
+        private TimeSpan timeSum;
+
         /// <summary>
         /// 
         /// </summary>
@@ -44,7 +46,7 @@ namespace MyListMove
         public VideoInfoWindow(IPluginHost plgin)
         {
             InitializeComponent();
-
+            timeSum = new TimeSpan(0);
             pluginHost = plgin;
         }
 
@@ -56,7 +58,6 @@ namespace MyListMove
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-
             AddVideoInfo("0123", "テストID", "http://www.nicovideo.jp/watch/sm2140648");
 
         }
@@ -83,8 +84,7 @@ namespace MyListMove
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
-                    MessageBox.Show(ex.StackTrace);
+                    
                 }
 
             }
@@ -144,9 +144,16 @@ namespace MyListMove
                 tempVideoInfoPanel.VideoURL = tempURL;
                 tempVideoInfoPanel.ThumbnailURL = thumbnail;
 
-                Point tempPoint = new Point(3, 10 + (200 * videoInfoList.Count));
+                // 合計時間　加算
+                TimeSpan interval = new TimeSpan(0,Int32.Parse(tempTime.Split(':')[0]), Int32.Parse(tempTime.Split(':')[1]));
+                timeSum += interval;
+                this.labelTimeSum.Text = timeSum.ToString(@"mm\:ss");
+
+                Point tempPoint = new Point(3, 10 + (tempVideoInfoPanel.Size.Height * videoInfoList.Count));
                 tempPoint.Offset(panelVideoInfoList.AutoScrollPosition);
                 tempVideoInfoPanel.Location = tempPoint;
+
+                ShowReqInfo2BSP(userId, videoId);
 
                 tempVideoInfoPanel.EventManageButtonClick += new VideoInfoEventHandler(ManageButtonsClick);
 
@@ -157,13 +164,9 @@ namespace MyListMove
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                MessageBox.Show(ex.StackTrace);
-
                 return false;
-
             }
-             
+            
             return true;
 
         }
@@ -178,7 +181,9 @@ namespace MyListMove
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Info("UserID:" + e.UserID);
 
-            this.ShowVideoInfo2Own(e.VideoTitle,e.VideoURL,e.UserID);
+            string videoId = e.VideoURL.Replace("http://www.nicovideo.jp/watch/", "");
+
+            this.ShowVideoInfo2Own(e.VideoTitle, videoId, e.UserID);
         }
 
         /// <summary>
@@ -204,9 +209,10 @@ namespace MyListMove
         /// <summary>
         /// 
         /// </summary>
-        private void ShowReqInfo2BSP()
+        private void ShowReqInfo2BSP(string kotehan, string videoId)
         {
-            pluginHost.SendOwnerComment("/press show blue {0} 業務連絡");
+            string output = String.Format("/press show blue {0}が{1} リクエスト",kotehan,videoId);
+            pluginHost.SendOwnerComment(output);
         }
 
         /// <summary>
@@ -222,5 +228,15 @@ namespace MyListMove
             pluginHost.SendOwnerComment(output);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            string output = String.Format("/clear");
+            pluginHost.SendOwnerComment(output);
+        }
     }
 }

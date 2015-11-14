@@ -122,7 +122,7 @@ namespace MyListMove
         private void PluginHost_ReceivedComment(object sender, ReceivedCommentEventArgs e)
         {
             int count = e.CommentDataList.Count;
-            if (count < 0) { return; }
+            if (count < 1) { return; }
 
             NicoLibrary.NicoLiveData.LiveCommentData commentData = e.CommentDataList[count - 1];
 
